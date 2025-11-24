@@ -19,10 +19,14 @@ export async function GET() {
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { name, description, config, categories, metrics, includeTimeSeries } = body;
+    const { name, description, config } = body;
 
     // Handle both formats: { config } or { categories, metrics, includeTimeSeries }
-    const reportConfig = config || { categories, metrics, includeTimeSeries };
+    const reportConfig = config || {
+      categories: body.categories,
+      metrics: body.metrics,
+      includeTimeSeries: body.includeTimeSeries,
+    };
 
     if (!reportConfig) {
       return NextResponse.json(
