@@ -1,10 +1,46 @@
 const WebSocket = require('ws');
 const { Pool } = require('pg');
-require('dotenv').config();
+const path = require('path');
+require('dotenv').config({ path: path.join(__dirname, '../.env.local') });
+
+if (!process.env.DATABASE_URL) {
+  console.error('❌ DATABASE_URL is not set in .env.local');
+  console.log('\nPlease create a .env.local file with:');
+  console.log('DATABASE_URL=postgresql://username:password@localhost:5432/analytics_db');
+  process.exit(1);
+}
 
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
 });
+
+// Test database connection
+pool.on('error', (err) => {
+  console.error('❌ Unexpected database error:', err);
+  if (err.code === '3D000') {
+    console.error('\n💡 Database does not exist. Run: npm run db:create');
+  }
+});
+
+// Test connection on startup
+pool.query('SELECT NOW()')
+  .then(() => {
+    console.log('✅ Database connection established');
+  })
+  .catch((err) => {
+    console.error('❌ Failed to connect to database:', err.message);
+    if (err.code === '3D000') {
+      console.error('\n💡 Database does not exist. Please run:');
+      console.error('   npm run db:create');
+      console.error('\nOr create the database manually and run:');
+      console.error('   npm run db:migrate');
+      console.error('   npm run db:seed');
+    } else if (err.code === 'ECONNREFUSED') {
+      console.error('\n💡 Could not connect to PostgreSQL.');
+      console.error('   Make sure PostgreSQL is running.');
+    }
+    process.exit(1);
+  });
 
 const wss = new WebSocket.Server({ port: process.env.WS_PORT || 3001 });
 

@@ -5,7 +5,7 @@ An advanced analytics platform that provides real-time insights into business me
 ## Features
 
 - **Real-time Data Updates**: WebSocket-based real-time data streaming with <1s latency
-- **Interactive Visualizations**: 
+- **Interactive Visualizations**:
   - Chart.js for responsive charts (Line, Doughnut)
   - D3.js for advanced custom visualizations
 - **Custom Report Generation**: Create and save custom reports with selected metrics and categories
@@ -25,7 +25,7 @@ An advanced analytics platform that provides real-time insights into business me
 
 ### Prerequisites
 
-- Node.js 18+ 
+- Node.js 18+
 - PostgreSQL 12+
 - npm or yarn
 
@@ -50,13 +50,34 @@ NODE_ENV=development
 
 3. Set up the database:
 
+**Option 1: Automatic setup (recommended)**
+
 ```bash
+# This will create the database, run migrations, and seed data
+npm run db:setup
+```
+
+**Option 2: Manual setup**
+
+```bash
+# Create the database (if it doesn't exist)
+npm run db:create
+
+# Or manually create the database:
+# psql -U postgres -c "CREATE DATABASE analytics_db;"
+
 # Run migrations
 npm run db:migrate
 
 # Seed sample data
 npm run db:seed
 ```
+
+**Note:** Make sure PostgreSQL is running before setting up the database:
+
+- macOS: `brew services start postgresql`
+- Linux: `sudo systemctl start postgresql`
+- Windows: Start PostgreSQL service from Services
 
 4. Start the development servers:
 
@@ -113,6 +134,7 @@ The dashboard uses WebSockets to receive real-time data updates. The WebSocket s
 ### Report Generation
 
 Users can:
+
 - Select specific categories and metrics
 - Generate custom reports
 - Save reports for future reference
