@@ -1,0 +1,43 @@
+{
+  "name": "analytics-dashboard",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "db:migrate": "node scripts/migrate.js",
+    "db:seed": "node scripts/seed.js",
+    "ws:server": "node server/websocket-server.js"
+  },
+  "dependencies": {
+    "next": "^14.0.4",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "d3": "^7.8.5",
+    "chart.js": "^4.4.1",
+    "react-chartjs-2": "^5.2.0",
+    "pg": "^8.11.3",
+    "ws": "^8.14.2",
+    "date-fns": "^2.30.0",
+    "recharts": "^2.10.3",
+    "zod": "^3.22.4",
+    "clsx": "^2.0.0",
+    "tailwindcss": "^3.3.6",
+    "autoprefixer": "^10.4.16",
+    "postcss": "^8.4.32",
+    "dotenv": "^16.3.1"
+  },
+  "devDependencies": {
+    "@types/node": "^20.10.6",
+    "@types/react": "^18.2.46",
+    "@types/react-dom": "^18.2.18",
+    "@types/d3": "^7.4.3",
+    "@types/ws": "^8.5.10",
+    "@types/pg": "^8.10.9",
+    "typescript": "^5.3.3",
+    "eslint": "^8.56.0",
+    "eslint-config-next": "^14.0.4"
+  }
+}
