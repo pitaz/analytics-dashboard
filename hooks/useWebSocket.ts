@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useRef } from "react";
 
 interface WebSocketData {
   type: string;
@@ -21,34 +21,34 @@ export function useWebSocket(url: string) {
         const ws = new WebSocket(url);
 
         ws.onopen = () => {
-          console.log('WebSocket connected');
+          console.log("WebSocket connected");
           setIsConnected(true);
           setError(null);
         };
 
-        ws.onmessage = (event) => {
+        ws.onmessage = (event: MessageEvent) => {
           try {
             const message = JSON.parse(event.data);
             if (isMounted) {
               setData(message);
             }
           } catch (err) {
-            console.error('Error parsing WebSocket message:', err);
+            console.error("Error parsing WebSocket message:", err);
           }
         };
 
-        ws.onerror = (err) => {
-          console.error('WebSocket error:', err);
+        ws.onerror = (err: Event) => {
+          console.error("WebSocket error:", err);
           if (isMounted) {
-            setError(new Error('WebSocket connection error'));
+            setError(new Error("WebSocket connection error"));
             setIsConnected(false);
           }
         };
 
         ws.onclose = () => {
-          console.log('WebSocket disconnected');
+          console.log("WebSocket disconnected");
           setIsConnected(false);
-          
+
           // Attempt to reconnect after 3 seconds
           if (isMounted) {
             reconnectTimeoutRef.current = setTimeout(() => {
@@ -59,7 +59,7 @@ export function useWebSocket(url: string) {
 
         wsRef.current = ws;
       } catch (err) {
-        console.error('Error creating WebSocket:', err);
+        console.error("Error creating WebSocket:", err);
         if (isMounted) {
           setError(err as Error);
         }
@@ -87,4 +87,3 @@ export function useWebSocket(url: string) {
 
   return { data, error, isConnected, sendMessage };
 }
-
