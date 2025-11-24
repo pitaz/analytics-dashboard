@@ -1,5 +1,5 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { query } from '@/lib/db';
+import { NextRequest, NextResponse } from "next/server";
+import { query } from "@/lib/db";
 
 export async function GET() {
   try {
@@ -8,9 +8,9 @@ export async function GET() {
     );
     return NextResponse.json(result.rows);
   } catch (error) {
-    console.error('Error fetching reports:', error);
+    console.error("Error fetching reports:", error);
     return NextResponse.json(
-      { error: 'Failed to fetch reports' },
+      { error: "Failed to fetch reports" },
       { status: 500 }
     );
   }
@@ -30,7 +30,7 @@ export async function POST(request: NextRequest) {
 
     if (!reportConfig) {
       return NextResponse.json(
-        { error: 'Config is required' },
+        { error: "Config is required" },
         { status: 400 }
       );
     }
@@ -41,21 +41,30 @@ export async function POST(request: NextRequest) {
 
     if (categories && categories.length > 0) {
       // Validate categories to prevent SQL injection
-      const validCategories = ['revenue', 'users', 'conversion', 'engagement', 'performance'];
-      const filteredCategories = categories.filter((c: string) => 
-        typeof c === 'string' && validCategories.includes(c.toLowerCase())
+      const validCategories = [
+        "revenue",
+        "users",
+        "conversion",
+        "engagement",
+        "performance",
+      ];
+      const filteredCategories = categories.filter(
+        (c: string) =>
+          typeof c === "string" && validCategories.includes(c.toLowerCase())
       );
 
       if (filteredCategories.length === 0) {
         return NextResponse.json(
-          { error: 'Invalid categories provided' },
+          { error: "Invalid categories provided" },
           { status: 400 }
         );
       }
 
       // Use parameterized query for safety
-      const placeholders = filteredCategories.map((_, i) => `$${i + 1}`).join(',');
-      
+      const placeholders = filteredCategories
+        .map((_value: any, i: number) => `$${i + 1}`)
+        .join(",");
+
       // Get metrics data
       const metricsResult = await query(
         `
@@ -118,11 +127,10 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({ data: reportData });
   } catch (error) {
-    console.error('Error creating report:', error);
+    console.error("Error creating report:", error);
     return NextResponse.json(
-      { error: 'Failed to create report' },
+      { error: "Failed to create report" },
       { status: 500 }
     );
   }
 }
-
